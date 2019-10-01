@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# ***** PROJECT SPECIFIC *******
+gtfs/
+output/
