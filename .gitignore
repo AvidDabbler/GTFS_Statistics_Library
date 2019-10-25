@@ -106,3 +106,4 @@ venv.bak/
 # ***** PROJECT SPECIFIC *******
 gtfs/
 output/
+optibus/
