@@ -49,7 +49,7 @@ st_trp_routes_ids = ['trip_id', 'route_id', 'route_short_name', 'stop_sequence']
 min_fields = ['trip_id', 'route_id', 'route_short_name', 'stop_sequence_y']
 
 max_stopid = pd.merge(max_min_group, st_trp_routes, left_on=max_fields, right_on=st_trp_routes_ids)
-min_stopid= pd.merge(max_stopid, st_trp_routes, left_on=max_fields, right_on=st_trp_routes_ids)
+min_stopid= pd.merge(max_stopid, st_trp_routes, left_on=min_fields, right_on=st_trp_routes_ids)
 
 fields = ['stop_sequence_x', 'stop_sequence_y', 'departure_time_x',  'stop_sequence_x', 'pickup_type_x', 'drop_off_type_x', 'timepoint_x', 'service_id_x', 'trip_headsign_x', 'direction_id_x', 'block_id_x', 'shape_id_x', 'agency_id_x', 'route_long_name_x', 'route_desc_x', 'route_type_x', 'route_url_x', 'route_color_x', 'route_text_color_x', 'route_sort_order_x', 'min_headway_minutes_x', 'arrival_time_y', 'stop_sequence_y', 'pickup_type_y', 'drop_off_type_y', 'timepoint_y', 'service_id_y', 'trip_headsign_y', 'direction_id_y', 'block_id_y', 'shape_id_y', 'agency_id_y', 'route_long_name_y', 'route_desc_y', 'route_type_y', 'route_url_y', 'route_color_y', 'route_text_color_y', 'route_sort_order_y', 'min_headway_minutes_y']
 
