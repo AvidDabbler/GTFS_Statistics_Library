@@ -55,15 +55,17 @@ fields = ['stop_sequence_x', 'stop_sequence_y', 'departure_time_x',  'stop_seque
 
 final = min_stopid.drop(fields, axis=1)
 
-final2 = final.rename(columns={'arrival_time_x': 'Arrival Time'})
-final3 = final2.rename(columns={'stop_id_x': 'Destination Stop ID'})
-final4 = final3.rename(columns={'departure_time_y': 'Departure Time'})
-final5 = final4.rename(columns={'stop_id_y': 'Origin Stop ID'})
-final6 = final5.rename(columns={'trip_id': 'Trip ID'})
-final7 = final6.rename(columns={'route_id': 'Route ID'})
-final8 = final7.rename(columns={'route_short_name': 'Sign (route short name)'})
-final9 = final8[['Trip ID', 'Route ID', 'Sign (route short name)', 'Origin Stop ID', 'Destination Stop ID', 'Departure Time', 'Arrival Time']]
+final2 = final.rename(columns={'arrival_time_x': 'Arrival Time',
+                              'stop_id_x': 'Destination Stop ID',
+                              'departure_time_y': 'Departure Time',
+                              'stop_id_y': 'Origin Stop ID',
+                              'trip_id': 'Trip ID',
+                              'route_id': 'Route ID',
+                              'route_short_name': 'Sign (route short name)'})
+print('Columns renamed')
 
-final9.to_csv(export)
-print(final9)
+final3 = final2[['Trip ID', 'Route ID', 'Sign (route short name)', 'Origin Stop ID', 'Destination Stop ID', 'Departure Time', 'Arrival Time']]
+
+final3.to_csv(export)
+print(final3)
 print('fin')
