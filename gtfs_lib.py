@@ -123,7 +123,9 @@ class GTFS:
 
         stats_df = self.max_min_rename(stats_df)
 
-        return stats_df
+        final = stats_df.loc[:,~stats_df.columns.duplicated()]
+
+        return final
     
     def route_stats(self):
         trips = self.trip_stats()
