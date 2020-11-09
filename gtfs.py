@@ -159,16 +159,3 @@ class GTFS:
         routes = trips[r_fields].groupby(r_fields[:-1]).count()
 
         return routes
-
-gtfs = GTFS(r'c:\Users\wkjenkins\dev\gtfs_conversions\google_transit.zip')
-
-# tst = gtfs.times_stops_trips()
-# tst.to_csv(os.path.join(os.getcwd(), 'tst.csv'))
-
-print(gtfs.stops)
-
-trip_stats = gtfs.trip_stats()
-trip_stats.to_csv(os.path.join(os.getcwd(),'trip_stats.csv'))
-
-# route_stats = gtfs.route_stats()
-# route_stats.to_csv(os.path.join(os.getcwd(),'route_stats.csv'))

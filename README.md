@@ -1,5 +1,9 @@
 # GTFS Statistics Library
-Using pandas and shapely to manipulate a gtfs for usage in GIS data vizualizations
+Using pandas and shapely to manipulate a gtfs for usage in GIS data vizualizations.
+
+## Getting started
+Download the repo and just add `from gtfs import GTFS` to import it in and then use the GTFS class to load in your zipped file.
+
 
 ## GTFS()
 Use the initial GTFS class to load in a zipped up version of a GTFS and loads up all of the text files as DataFrames for later use. 
