@@ -24,6 +24,24 @@ class GTFS:
 
         os.mkdir(self.output)
 
+        def fix_times(row):
+            time = row.split(':')
+            hour = int(time[0])
+            list = time[1:]
+
+            if int(hour) >= 24:
+                hour = (hour - 24)
+                list.insert(0, str(hour))
+                t = ':'.join(list)
+                dt = pd.to_datetime(f'01-02-2020 {t}', format='%m-%d-%Y %H:%M:%S')
+            else:
+                list.insert(0, str(hour))
+                t = ':'.join(list)
+                dt = pd.to_datetime(f'01-01-2020 {t}', format='%m-%d-%Y %H:%M:%S')
+
+            return dt
+            
+
         with zipfile.ZipFile(self.zip, 'r') as myzip:
             myzip.extractall(self.folder)
         if os.path.exists(os.path.join(self.folder, 'agency.txt')):
@@ -44,6 +62,8 @@ class GTFS:
             self.stops = pd.read_csv(os.path.join(self.folder, 'stops.txt'))
         if os.path.exists(os.path.join(self.folder, 'stop_times.txt')):
             self.stop_times = pd.read_csv(os.path.join(self.folder, 'stop_times.txt'))
+            self.stop_times['arrival_time'] = self.stop_times['arrival_time'].apply(lambda s: fix_times(s))
+            self.stop_times['departure_time'] = self.stop_times['departure_time'].apply(lambda s: fix_times(s))
         if os.path.exists(os.path.join(self.folder, 'transfers.txt')):
             self.transfers = pd.read_csv(os.path.join(self.folder, 'transfers.txt'))
         if os.path.exists(os.path.join(self.folder, 'trips.txt')):
@@ -123,13 +143,17 @@ class GTFS:
 
         stats_df = self.max_min_rename(stats_df)
 
+        stats_df['trip_time'] = (pd.to_datetime(stats_df['max_departure_time'], format='%H:%M:%S') - pd.to_datetime(stats_df['min_departure_time'], format='%H:%M:%S'))
+        stats_df['trip_time'] = stats_df['trip_time'].apply(lambda s: s.total_seconds()/60)
+
+        print(type(stats_df['trip_time'][1]))
+
         final = stats_df.loc[:,~stats_df.columns.duplicated()]
 
         return final
     
     def route_stats(self):
         trips = self.trip_stats()
-        trips['trips_count'] = 1
 
         r_fields = ['route_id', 'route_short_name', 'route_long_name', 'trips_count'] 
         routes = trips[r_fields].groupby(r_fields[:-1]).count()
