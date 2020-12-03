@@ -159,7 +159,7 @@ class GTFS:
         
         trips = self.trip_stats()
 
-        r_fields = ['route_id', 'route_short_name', ''] 
+        r_fields = ['route_id', 'route_short_name'] 
         trips['trip_count'] = 1
         routes = trips[r_fields].groupby(r_fields).count()
 

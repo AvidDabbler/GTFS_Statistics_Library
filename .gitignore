@@ -112,3 +112,5 @@ optibus/
 GTFS_Data_Conversion.py
 test.py
 gtfs.ipynb
+.vscode/
+.idea/
