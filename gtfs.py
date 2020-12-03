@@ -107,8 +107,8 @@ class GTFS:
 
         # group by trips and routes & find last and first stops by trip and route
         try:
-            fields = ['trip_id', 'route_id', 'route_short_name', 'stop_id', 'stop_sequence']
-            groups = ['trip_id', 'route_id', 'route_short_name']
+            fields = ['trip_id', 'route_id', 'route_short_name', 'route_long_name', 'stop_id', 'stop_sequence']
+            groups = ['trip_id', 'route_id', 'route_short_name', 'route_long_name']
             fmax = ['stop_sequence']
             
             # find the max stop_sequece id's and add a boolean end column
@@ -120,25 +120,24 @@ class GTFS:
         except:
             print('Issue with group by calculations')
 
-        # join min and max groups on groups list
-#         try:
-        # merge the min and max records
-        max_min_group = pd.merge(max_group, min_group, left_on=groups, right_on=groups)
+        mm_group = self.max_min_rename(pd.merge(max_group, min_group, left_on=groups, right_on=groups))
 
-        max_min_group = self.max_min_rename(max_min_group)
+        print(mm_group)
+
+        max_min_group = mm_group.loc[:,~mm_group.columns.duplicated()]
 
         min_ids = ['trip_id', 'route_id', 'route_short_name', 'min_stop_sequence']
         max_ids = ['trip_id', 'route_id', 'route_short_name', 'max_stop_sequence']
         st_trp_routes_ids = ['trip_id', 'route_id', 'route_short_name', 'stop_sequence']
         update_fields = ['stop_id', 'arrival_time', 'departure_time']
-        drop_fields = ['pickup_type', 'drop_off_type', 'timepoint', 'shape_dist_traveled', 'trip_headsign', 'direction_id', 'wheelchair_accessible', 'route_long_name', 'route_type', 'route_color', 'route_text_color']
+        drop_fields = ['pickup_type', 'drop_off_type', 'timepoint', 'shape_dist_traveled', 'trip_headsign', 'direction_id', 'wheelchair_accessible', 'route_type', 'route_color', 'route_text_color']
         max_drop = ['service_id', 'block_id', 'shape_id']
 
         # join min max table to stop times trips route table
         max_stopid = pd.merge(max_min_group, self.stop_times_trip_route, left_on=max_ids, right_on=st_trp_routes_ids)
         max_stopid = self.rename_list(max_stopid, update_fields).drop(drop_fields, axis=1).drop(max_drop, axis=1)
 
-        stats_df= pd.merge(max_stopid, self.stop_times_trip_route, left_on=min_ids, right_on=st_trp_routes_ids)
+        stats_df = pd.merge(max_stopid, self.stop_times_trip_route, left_on=min_ids, right_on=st_trp_routes_ids)
         stats_df = self.rename_list(stats_df, update_fields).drop(drop_fields, axis=1)
 
         stats_df = self.max_min_rename(stats_df)
@@ -153,9 +152,15 @@ class GTFS:
         return final
     
     def route_stats(self):
+        # return max min frequency
+        # total trips
+        # total shapes
+        # max min trip time
+        
         trips = self.trip_stats()
 
-        r_fields = ['route_id', 'route_short_name', 'route_long_name', 'trips_count'] 
-        routes = trips[r_fields].groupby(r_fields[:-1]).count()
+        r_fields = ['route_id', 'route_short_name', ''] 
+        trips['trip_count'] = 1
+        routes = trips[r_fields].groupby(r_fields).count()
 
         return routes
